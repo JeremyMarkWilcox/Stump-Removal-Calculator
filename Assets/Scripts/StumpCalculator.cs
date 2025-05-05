@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class StumpCalculator : MonoBehaviour
 {
@@ -13,13 +14,13 @@ public class StumpCalculator : MonoBehaviour
     [SerializeField] private TMP_Text resultText;
     [SerializeField] private Button calculateButton;
     [SerializeField] private Button resetButton;
-    [SerializeField] private Button exitButton;
+    [SerializeField] private Button backButton;
 
     private void Start()
     {
         calculateButton.onClick.AddListener(CalculateCost);
         resetButton.onClick.AddListener(Reset);
-        exitButton.onClick.AddListener(ExitApp);
+        backButton.onClick.AddListener(ReturnToMainMenu);
 
         debrisToggle.isOn = false;
         backfillDropdown.value = 0;
@@ -102,30 +103,9 @@ public class StumpCalculator : MonoBehaviour
         backfillDropdown.value = 0; // Default to None
         resultText.text = "Enter values and click Calculate.";
     }
-
-    public void ExitApp()
+    public void ReturnToMainMenu()
     {
-#if UNITY_EDITOR
-        // Quit in the Unity Editor
-        UnityEditor.EditorApplication.isPlaying = false;
-#elif UNITY_ANDROID
-        // Exit the app on Android
-        try
-        {
-            Application.Quit();
-            // Fallback: Force exit using System.exit if Application.Quit fails
-            using (var system = new AndroidJavaClass("java.lang.System"))
-            {
-                system.CallStatic("exit", 0);
-            }
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError("Failed to exit app: " + e.Message);
-        }
-#else
-        // Exit on other platforms (e.g., PC standalone)
-        Application.Quit();
-#endif
+        SceneManager.LoadScene("Main Menu");
     }
+
 }
